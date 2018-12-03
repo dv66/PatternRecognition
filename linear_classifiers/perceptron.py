@@ -159,7 +159,7 @@ def keslerConstruction(dataSet):
 
 
 
-FILE = '../datasets/synthetic_data_for_bayesian_classifier/Train.txt'
+FILE = '../datasets/synthetic_data_for_bayesian_classifier/Train (1).txt'
 # FILE = '../datasets/synthetic_data_for_bayesian_classifier/Train (1).txt'
 # FILE = '../datasets/synthetic_data_for_bayesian_classifier/synthetic_real_valued_data.txt'
 fp = open(FILE)
@@ -170,8 +170,9 @@ for line in lines:
     line = list(map(float, line))
     dataSet.append(line)
 dataSet = np.array(dataSet)
-
-
+np.random.shuffle(dataSet)
+print(dataSet)
+train, test = dataSet[:250], dataSet[250:]
 '''
     1 == +ve
     2 == -ve
@@ -180,10 +181,29 @@ dataSet = np.array(dataSet)
 
 
 
-print(perceptron(dataSet))
+# print(perceptron(dataSet))
 # print(rewardPunishment(dataSet))
 # print(pocket(dataSet))
-# print(keslerConstruction(dataSet))
+w = keslerConstruction(train)
+W = np.array([w[:4], w[4:8], w[8:]])
+error = 0
+for d in test:
+    s1 = (np.array(np.mat(W[0]) * np.transpose(np.mat(d)))[0][0], 1)
+    s2 = (np.array(np.mat(W[1]) * np.transpose(np.mat(d)))[0][0], 2)
+    s3 = (np.array(np.mat(W[2]) * np.transpose(np.mat(d)))[0][0], 3)
+    score = [s1,s2,s3]
+    score = sorted(score)
+    win = score[-1][1]
+    print(win)
+    if d[-1] != win: error+=1
+print('error = ',  error/len(test))
+
+
+
+
+
+
+
 
 
 
